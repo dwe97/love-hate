@@ -14,7 +14,7 @@ function Entity:new(o)
 	return o
 end
 
-function Entity:update(dt)
+function Entity:update(dt, worldGridWidth, worldGridHeight)
 	-- Updates the animation. (Enables frame changes)
 
 	MovementVector = {
@@ -76,13 +76,13 @@ function Entity:update(dt)
 			end
 		end
 
-		if (self.offsetX ~= 0) and (math.abs(self.offsetX) % World.gridWidth) == 0 then
+		if (self.offsetX ~= 0) and (math.abs(self.offsetX) % worldGridWidth) == 0 then
 			self.moving = false
 			self.gridX = self.gridX + currentMovement[1]
 			self.offsetX = 0
 		end
 
-		if (self.offsetY ~= 0) and (math.abs(self.offsetY) % World.gridHeight) == 0 then
+		if (self.offsetY ~= 0) and (math.abs(self.offsetY) % worldGridHeight) == 0 then
 			self.moving = false
 			self.gridY = self.gridY + currentMovement[2]
 			self.offsetY = 0
@@ -109,14 +109,14 @@ function Entity:load(spriteWidth, spriteHeight)
 	};
 end
 
-function Entity:draw()
+function Entity:draw(worldGridWidth, worldGridHeight)
 
 	for _,anim in ipairs(self.PlayerAnimations) do
 		-- anim[1] = U,R,D, or L; anim[2] = newAnimation
 			if (anim[1] == self.direction) then
 					anim[2]:draw(
-						(self.gridX * World.gridWidth) + self.offsetX,
-						(self.gridY * World.gridHeight) - (42 - 32) + self.offsetY
+						(self.gridX * worldGridWidth) + self.offsetX,
+						(self.gridY * worldGridHeight) - (42 - 32) + self.offsetY
 					)
 				end
 			end
