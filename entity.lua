@@ -15,7 +15,6 @@ function Entity:new(o)
 end
 
 function Entity:update(dt)
-function love.update(dt)
 	-- Updates the animation. (Enables frame changes)
 
 	MovementVector = {
@@ -49,7 +48,7 @@ function love.update(dt)
 
 	end
 
-	for _,anim in ipairs(PlayerAnimations) do
+	for _,anim in ipairs(self.PlayerAnimations) do
 		-- anim[1] = U,R,D, or L; anim[2] = newAnimation
 		if (anim[1] == self.direction) and (anim[1] ~= 'S') then
 			if self.moving then
@@ -92,6 +91,34 @@ function love.update(dt)
 
 	end
 
-
 end
+
+function Entity:load(spriteWidth, spriteHeight)
+	upImage, rightImage, downImage, leftImage =
+		love.graphics.newImage("stueyarg_up.png"),
+		love.graphics.newImage("stueyarg_right.png"),
+		love.graphics.newImage("stueyarg_down.png"),
+		love.graphics.newImage("stueyarg_left.png");
+
+	self.PlayerAnimations = {
+		{'U', newAnimation(upImage, spriteWidth, spriteHeight, 0.2, 0)},
+		{'R', newAnimation(rightImage, spriteWidth, spriteHeight, 0.2, 0)},
+		{'D', newAnimation(downImage, spriteWidth, spriteHeight, 0.2, 0)},
+		{'L', newAnimation(leftImage, spriteWidth, spriteHeight, 0.2, 0)},
+		{'S', love.graphics.newQuad( 0, 0, spriteWidth, spriteHeight, spriteWidth, spriteHeight)},
+	};
+end
+
+function Entity:draw()
+
+	for _,anim in ipairs(self.PlayerAnimations) do
+		-- anim[1] = U,R,D, or L; anim[2] = newAnimation
+			if (anim[1] == self.direction) then
+					anim[2]:draw(
+						(self.gridX * World.gridWidth) + self.offsetX,
+						(self.gridY * World.gridHeight) - (42 - 32) + self.offsetY
+					)
+				end
+			end
+
 end
